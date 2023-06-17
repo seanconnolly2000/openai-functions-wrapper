@@ -2,7 +2,6 @@ import _collections_abc
 from typing import Dict, List
 from enum import Enum
 
-#TODO: use Eval for standard Python functions.
 
 #propertype.name for name, .value for value
 class PropertyType(str, Enum):
