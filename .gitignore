@@ -1,0 +1,12 @@
+env
+.env
+*.lock
+__pycache__
+__pypackages__
+.venv
+*.pyc
+.pdm.toml
+build/
+dist/
+node_modules/
+.vs/
