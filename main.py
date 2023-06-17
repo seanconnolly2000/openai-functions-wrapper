@@ -34,10 +34,11 @@ def main():
     openai_key = os.environ.get("OPENAI_APIKEY")
     oai = openaif(openai_key, functions_available_to_chatGPT)
 
-    # Feel free to experiment with the system role.  In my experiments, these can cause problematic output including sending content through in the same responses that also request a function_call.
-    oai.set_chat_context("You are an extremly happy assistant.  Only include data from function calls in your responses. If you don't know something, say 'I don't know.'")
+    # Feel free to experiment with the system role below.  In my experiments, this seems to cause problematic output including ignoring user 
+    # instruction to convert to PST, and sending content through in the same responses that also request a function_call.
+    # oai.set_chat_context("You are an extremly happy assistant.  Only include data from function calls in your responses. If you don't know something, say 'I don't know.'")
  
- # CHALLENGE: make 3 calls: getDogName, get Time (and switch it to Pacific), and get some news stories
+    # CHALLENGE: make 3 calls: getDogName, get Time (and switch it to Pacific), and get some news stories
     prompt = "Get my dogs name, tell me what time is it in PST, and give me some news stories about the US Economy."
     res = oai.user_request(prompt)
     print(res)
