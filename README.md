@@ -46,7 +46,7 @@ SENTENCE_ENCODER={I used all-MiniLM-L6-v2, which was in the
 ```
 
 ## Pinecone:
-If you're going to use pinecone, you'll need to create an index on pinecone and add encoded data.  You can look at my other project "azure-pinecone-openai-demo" for scripts that will upload azure's "Northwinds" employee dataset, or upload your own data!  If you do, remember to update your description of what is stored in your data so ChatCompletion comprehends when that function_call might be required.
+If you're going to use pinecone, you'll need to create an index on pinecone and add encoded data.  You can look at my other project "azure-pinecone-openai-demo" for scripts that will upload azure's "Northwinds" employee dataset, or upload your own data.  If you use your own data, remember to update the description of what is stored in your data so ChatCompletion can comprehend when that function_call might be required.
 
 
 ## Usage / Results
@@ -63,7 +63,7 @@ ChatGPT determines it needs to perform the following external calls:
 4) getNews - to obtain 4 news articles on the US Economy (this is a free api you can sign up for at newsapi.org)
 5) getPineconeData - this illustrates how chatGPT can format a query to an external vector database and return silo'd information (you can sign up for a free Pinecone database at Pinecone.io).
 
-The result is as follows (failed to give me sightseeing tips, but did give me 6 citations from external data sources!):
+The result is as follows (failed to give me sightseeing tips, but did give me 5 citations from external data sources!):
 
 ```
   "message": {
