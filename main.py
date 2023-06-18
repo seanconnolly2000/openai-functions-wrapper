@@ -4,6 +4,8 @@ from functions.chat import functions, function, property, PropertyType
 from openaif import openaif
 import json
 
+from functions.samples import getWeather
+
 def main():
     load_dotenv()
     # You'll need to create a ".env" file with your credentials in the format:
@@ -11,6 +13,8 @@ def main():
     #OTHER_ITEMS=xxxyyy
 
     functions_available_to_chatGPT = functions()
+
+    w = getWeather(**{'q':'San Francisco, CA', 'days': 5})
 
     #If you've used SQLCLient or OracleClient, this is similar.  You create your function, and add parameters.
     # Then you add your function to the "functions" dictionary object (a dictionary is used to allow subsequent function lookup)
@@ -20,6 +24,10 @@ def main():
     f.properties.add(property("language",PropertyType.string, "Language of News", True, ["en", "es"], default="en"))
     f.properties.add(property("pageSize",PropertyType.integer, "Page Size", True, None, default=5))
     f.properties.add(property("sortBy",PropertyType.string, "Sort By item", False))
+    functions_available_to_chatGPT[f.name] = f
+
+    f = function(name="getWeather", description="Weather API function")
+    f.properties.add(property("q",PropertyType.string, "Name of city to get weather", True))
     functions_available_to_chatGPT[f.name] = f
 
     # returns the datetime in GMT
@@ -39,7 +47,7 @@ def main():
     # oai.set_chat_context("You are an extremly happy assistant.  Only include data from function calls in your responses. If you don't know something, say 'I don't know.'")
  
     # CHALLENGE: make 3 calls: getDogName, get Time (and switch it to Pacific), and get some news stories
-    prompt = "Get my dogs name, tell me what time is it in PST, and give me some news stories about the US Economy."
+    prompt = "What is my dog's name, tell me what time is it in PST and what I should wear outside in San Francisco, CA?  Also can you give me some information about the US Economy?"
     res = oai.user_request(prompt)
     print(res)
 
