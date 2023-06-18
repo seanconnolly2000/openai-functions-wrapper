@@ -16,7 +16,7 @@ Additionally, I've created function wrappers that allow you to create the format
     f.properties.add(property("prompt",PropertyType.string, "The prompt to be used to query the vector database.  This must be in the form of a concise sentence.", True))
     f.properties.add(property("top",PropertyType.integer, "Records to be returned.", True, None, default=5))
 ```
-Obviously, you need to add the code to get the data, but wiring up with ChatCompletion is easy - **It is that simple!!!**
+Obviously, you need to add the code to get the data, but **wiring up function definitions with ChatCompletion is now super easy!**
 
 For ChatCompletion to work effectively, you need to keep a running history of the session.  This is done in the openaif.py file.  This illustrates how to append your conversation to "messages" to make the chat pipeline and function information work correctly.  This also allows you to inject a "system" message (which alters the chat context, I'm not sure if it is for the best...).
 
