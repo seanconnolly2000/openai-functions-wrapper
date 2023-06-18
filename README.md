@@ -67,9 +67,9 @@ ChatGPT determines it needs to perform the following external calls:
 3) getWeather - to obtain the weather in London (this is a free api you can sign up for at weatherapi.com)-
 4) getNews - to obtain 4 news articles on the US Economy (this is a free api you can sign up for at newsapi.org)
 5) getPineconeData - this illustrates how chatGPT can format a query to an external vector database and return silo'd information (you can sign up for a free Pinecone database at Pinecone.io).
-6) sendEmail - this is fun - chatGPT can be a personal assistant for you, sending out emails.
+7) sendEmail - this is fun - chatGPT can be a personal assistant for you, sending out emails.
 
-The result is as follows (failed to give me sightseeing tips, but did give me 5 citations from external data sources, and send an email!):
+The result is as follows (ChatCompletion queried 5 functions for information from external data sources, **and then sent an email!**):
 
 ```
   "message": {
