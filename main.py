@@ -14,8 +14,6 @@ def main():
 
     functions_available_to_chatGPT = functions()
 
-    w = getWeather(**{'q':'San Francisco, CA', 'days': 5})
-
     #If you've used SQLCLient or OracleClient, this is similar.  You create your function, and add parameters.
     # Then you add your function to the "functions" dictionary object (a dictionary is used to allow subsequent function lookup)
     # Note: "default" on properties is not specified, however, it seems to help chatcompletion.
@@ -23,15 +21,17 @@ def main():
     f.properties.add(property("q",PropertyType.string, "Query to return news stories", True))
     f.properties.add(property("language",PropertyType.string, "Language of News", True, ["en", "es"], default="en"))
     f.properties.add(property("pageSize",PropertyType.integer, "Page Size", True, None, default=5))
-    f.properties.add(property("sortBy",PropertyType.string, "Sort By item", False))
+    f.properties.add(property("from",PropertyType.string, "Optional Date of oldest article.", False))
+    f.properties.add(property("to",PropertyType.string, "Optional Date of newest article.", False))
     functions_available_to_chatGPT[f.name] = f
 
+    # Weather API (current weather - can be improved to include forecast)
     f = function(name="getWeather", description="Weather API function")
     f.properties.add(property("q",PropertyType.string, "Name of city to get weather", True))
     functions_available_to_chatGPT[f.name] = f
 
     # returns the datetime in GMT
-    f = function(name="getCurrentDateTime", description="Obtain the current UTC date and time.")
+    f = function(name="getCurrentUTCDateTime", description="Obtain the current UTC datetime.")
     functions_available_to_chatGPT[f.name] = f
 
     # returns a random dog's name
@@ -41,13 +41,16 @@ def main():
     #instantiate the llm with the functions in list format (.to_json())
     openai_key = os.environ.get("OPENAI_APIKEY")
     oai = openaif(openai_key, functions_available_to_chatGPT)
+  
 
     # Feel free to experiment with the system role below.  In my experiments, this seems to cause problematic output including ignoring user 
     # instruction to convert to PST, and sending content through in the same responses that also request a function_call.
     # oai.set_chat_context("You are an extremly happy assistant.  Only include data from function calls in your responses. If you don't know something, say 'I don't know.'")
  
-    # CHALLENGE: make 3 calls: getDogName, get Time (and switch it to Pacific), and get some news stories
-    prompt = "What is my dog's name, tell me what time is it in PST and what I should wear outside in San Francisco, CA?  Also can you give me some information about the US Economy?"
+    # FUN CHALLENGE: make 4 calls: getDogName, getCurrentDateTime (and switch it to Pacific - not always accurate), getWeather, and get some news stories
+    # Since I am asking it to get a little creative with sightseeing tips for London, I'm setting the temperature below to 1.
+    oai.temperature = 1
+    prompt = "What is my dog's name, tell me what time is it in PST, what is the weather like in London, and what sightseeing activities would you recommend for London this time of year?  Also please give me 5 articles on the US Economy from the last week."
     res = oai.user_request(prompt)
     print(res)
 

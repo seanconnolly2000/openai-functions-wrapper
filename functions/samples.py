@@ -45,7 +45,7 @@ def getWeather(**kwargs)->List:
         return None
 
 
-def getCurrentDateTime() -> str:
+def getCurrentUTCDateTime() -> str:
     return str(datetime.datetime.utcnow())
 
 def getDogName() -> str:

@@ -7,10 +7,8 @@ from enum import Enum
 class PropertyType(str, Enum):
     string = 'string'
     integer= 'integer'
-    float= 'float'          #API docs don't specify this
-    datetime = 'datetime'   #API docs don't specify this
-
-
+    float= 'float'          #API docs don't specify this - could generate an error
+ 
 class property():
    def __init__(self, name: str, type: PropertyType, description: str, required: bool=False, enum: List=[], default: str=None):
         self.name = name
