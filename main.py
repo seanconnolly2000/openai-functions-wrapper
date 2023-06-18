@@ -71,10 +71,17 @@ def main():
     # FUN CHALLENGE: make 4 calls: getDogName, getCurrentDateTime (and switch it to Pacific - not always accurate), getWeather, and get some news stories
     # Since I am asking it to get a little creative with sightseeing tips for London, I'm setting the temperature below to 1.
     oai.temperature = 1
-    prompt = "What is my dog's name, tell me what time is it in PST, what is the weather like in London, and what sightseeing activities would you recommend for London this time of year?  Also please give me 5 articles on the US Economy from the last week.  Also are hearing aids included in my Northwinds Standard Healthcare Plan? Also email sean@broadworld.com and tell him I am running late for lunch."
-    res = oai.user_request(prompt)
-    print(res)
 
+    while True:
+        prompt = input("Enter your question: ")
+        if prompt.lower() == 'quit':
+            break
+        res = oai.user_request(prompt)
+        # Parse the response
+        response_content = res['choices'][0]['message']['content']
+        # Remove the city name and the degree symbol
+        response_content = response_content.replace('\u00b0F', ' degrees Fahrenheit')
+        print(response_content)
 
 if __name__ == "__main__":
     main()
