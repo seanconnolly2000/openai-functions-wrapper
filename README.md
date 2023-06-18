@@ -63,3 +63,28 @@ The result is as follows (failed to give me sightseeing tips, but did give me 6 
     }
     
 ```
+
+One thing I found of interest was that chatGPT formed a sentence for the vector search:
+
+```
+
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": null,
+        "function_call": {
+          "name": "getPineconeData",
+          "arguments": "{\n  \"prompt\": \"Northwinds Standard Healthcare Plan hearing aids\"\n}"
+        }
+      },
+      "finish_reason": "function_call"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 803,
+    "completion_tokens": 24,
+    "total_tokens": 827
+  }
+```
