@@ -30,7 +30,7 @@ def getNews(**kwargs) -> List:
         return None
 
 
-def getWeather(**kwargs)->List:
+def getCurrentWeather(**kwargs)->List:
      # free signup at weatherapi.com
     query_params = kwargs
     query_params['key'] =  os.environ.get("WEATHERAPI_KEY")
@@ -51,7 +51,33 @@ def getWeather(**kwargs)->List:
         return None
 
 
-#if you don't plan to use Sendgrid for sending emails, comment out this section
+def getThreeDayForecast(**kwargs)->List:
+    # free signup at weatherapi.com
+    query_params = kwargs
+    query_params['key'] =  os.environ.get("WEATHERAPI_KEY")
+    query_params['days'] = '3'
+    query_params['aqi'] = 'yes'
+    query_params['alerts'] = 'yes'
+
+    url = os.environ.get("3DAY_WEATHER_URL")
+    try:
+        res = requests.get(url, params=query_params)
+        data = res.json()
+        forecast = "The weather forecast for the next 3 days in {} is:\n".format(kwargs['q'])
+        if data["forecast"] != None:
+            for day in data['forecast']['forecastday']:
+                forecast += "{}. {} with a maximum temperature of {} and a minimum temperature of {}. There is a {} chance of rain.\n".format(
+                    day['date'], 
+                    day['day']['condition']['text'], 
+                    day['day']['maxtemp_f'], 
+                    day['day']['mintemp_f'], 
+                    day['day']['daily_chance_of_rain'])
+        return forecast
+    except:
+        return None
+
+
+# if you don't plan to use Sendgrid for sending emails, comment out this section
 import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
@@ -81,7 +107,7 @@ import pinecone
 from sentence_transformers import SentenceTransformer
 import torch
 
-#Initialize Pinecone client and the Index, which will be passed to the chat approaches.
+# Initialize Pinecone client and the Index, which will be passed to the chat approaches.
 def getPineconeData(**kwargs)->str:
     prompt = kwargs['prompt']
     top = kwargs['top'] if 'top' in kwargs else 5
@@ -102,4 +128,4 @@ def getPineconeData(**kwargs)->str:
     content = ''
     for result in matches['matches']:
         content += result['metadata']['content']
-    return content 
+    return content
