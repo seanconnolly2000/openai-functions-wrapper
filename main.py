@@ -37,6 +37,14 @@ def main():
     f.properties.add(property("top",PropertyType.integer, "Records to be returned.", True, None, default=5))
     functions_available_to_chatGPT[f.name] = f
 
+    # Send Email
+    # comment out if you are not using SendGrid.
+    f = function(name="sendEmail", description="Send an email. Must include to_email, subject, and body properties.")
+    f.properties.add(property("to_email",PropertyType.string, "The email recipient address in email format.", True))
+    f.properties.add(property("subject",PropertyType.string, "The subject of the email.", True))
+    f.properties.add(property("body",PropertyType.string, "The body of the email.", True))
+    functions_available_to_chatGPT[f.name] = f
+
     # returns the datetime in GMT
     f = function(name="getCurrentUTCDateTime", description="Obtain the current UTC datetime.")
     functions_available_to_chatGPT[f.name] = f
@@ -57,7 +65,7 @@ def main():
     # FUN CHALLENGE: make 4 calls: getDogName, getCurrentDateTime (and switch it to Pacific - not always accurate), getWeather, and get some news stories
     # Since I am asking it to get a little creative with sightseeing tips for London, I'm setting the temperature below to 1.
     oai.temperature = 1
-    prompt = "What is my dog's name, tell me what time is it in PST, what is the weather like in London, and what sightseeing activities would you recommend for London this time of year?  Also please give me 5 articles on the US Economy from the last week.  Also are hearing aids included in my Northwinds Standard Healthcare Plan?"
+    prompt = "What is my dog's name, tell me what time is it in PST, what is the weather like in London, and what sightseeing activities would you recommend for London this time of year?  Also please give me 5 articles on the US Economy from the last week.  Also are hearing aids included in my Northwinds Standard Healthcare Plan? Also email sean@broadworld.com and tell him I am running late for lunch."
     res = oai.user_request(prompt)
     print(res)
 

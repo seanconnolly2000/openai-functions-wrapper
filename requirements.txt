@@ -9,3 +9,4 @@ python-dotenv>=1.0.0
 pinecone-client>=2.2.1
 sentence-transformers>=2.2.2
 torch>=2.0.1
+sendgrid>=6.10.0
