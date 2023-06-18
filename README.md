@@ -35,6 +35,7 @@ NEWSAPI_ORG_URL=https://newsapi.org/v2/everything
 NEWSAPI_KEY={get a free key from newsapi.org}
 
 WEATHER_URL=http://api.weatherapi.com/v1/current.json
+3DAY_WEATHER_URL=http://api.weatherapi.com/v1/forecast.json
 WEATHERAPI_KEY={get a free key from weatherapi.com}
 
 PINECONE_API_KEY={get a free key from pinecone.io}
