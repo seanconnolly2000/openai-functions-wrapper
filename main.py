@@ -39,18 +39,18 @@ def main():
 
     # Pinecone vector database API (contains demo "company HR data" from Northwinds)
     # comment out if you are not using Pinecone.
-    f = function(name="getPineconeData", description="Company data pertaining only to health care plans, company policies, and employee roles.")
-    f.properties.add(property("prompt", PropertyType.string, "The prompt to be used to query the vector database.  This must be in the form of a concise sentence.", True))
-    f.properties.add(property("top", PropertyType.integer, "Records to be returned.", True, None, default=5))
-    functions_available_to_chatGPT[f.name] = f
+    # f = function(name="getPineconeData", description="Company data pertaining only to health care plans, company policies, and employee roles.")
+    # f.properties.add(property("prompt",PropertyType.string, "The prompt to be used to query the vector database.  This must be in the form of a concise sentence.", True))
+    # f.properties.add(property("top",PropertyType.integer, "Records to be returned.", True, None, default=5))
+    # functions_available_to_chatGPT[f.name] = f
 
     # Send Email
     # comment out if you are not using SendGrid.
-    f = function(name="sendEmail", description="Send an email. Must include to_email, subject, and body properties.")
-    f.properties.add(property("to_email", PropertyType.string, "The email recipient address in email format.", True))
-    f.properties.add(property("subject", PropertyType.string, "The subject of the email.", True))
-    f.properties.add(property("body", PropertyType.string, "The body of the email.", True))
-    functions_available_to_chatGPT[f.name] = f
+    # f = function(name="sendEmail", description="Send an email. Must include to_email, subject, and body properties.")
+    # f.properties.add(property("to_email",PropertyType.string, "The email recipient address in email format.", True))
+    # f.properties.add(property("subject",PropertyType.string, "The subject of the email.", True))
+    # f.properties.add(property("body",PropertyType.string, "The body of the email.", True))
+    # functions_available_to_chatGPT[f.name] = f
 
     # returns the datetime in GMT
     f = function(name="getCurrentUTCDateTime", description="Obtain the current UTC datetime.")
