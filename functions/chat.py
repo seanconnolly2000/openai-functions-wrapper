@@ -3,7 +3,7 @@ from typing import Dict, List
 from enum import Enum
 
 
-#propertype.name for name, .value for value
+# propertype.name for name, .value for value
 class PropertyType(str, Enum):
     string = 'string'
     integer= 'integer'
@@ -91,7 +91,7 @@ class functions(_collections_abc.MutableMapping):
         return l
 
 # You could use a list base if you would like:
-#class functions(_collections_abc.MutableSequence):
+# class functions(_collections_abc.MutableSequence):
 #    def __init__(self):
 #        self.data = []
 
@@ -121,6 +121,3 @@ class functions(_collections_abc.MutableMapping):
 #        for i in self.data:
 #            l.append(i.to_json())
 #        return l
-
-
-
