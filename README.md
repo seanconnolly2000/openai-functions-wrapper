@@ -24,7 +24,7 @@ For ChatCompletion to work effectively, you need to keep a running history of th
 1) Download this project
 2) Create a python environment and install the requirements (in requirements.txt)
 3) create a .env file with the environment variables (see below)
-4) Get any API keys you might need (or adjust the user prompt to say something simple like "what is my dogs name and what time is it?"
+4) Get any API keys you might need (or adjust the user prompt to say something simple like "what is my dogs name and what time is it?")
 
 ## .env File
 Create a .env file in the directory with the following (depending on what you'll be using):
