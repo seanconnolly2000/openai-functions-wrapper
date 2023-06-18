@@ -1,6 +1,6 @@
 # openai-functions-wrapper
 
-## ChatGPT can now execute your functions as needed!
+## ChatGPT can now execute your functions (including accessing your database) as needed!
 
 ### TL;DR: On June 13, 2023, OpenAI released chatGPT4 (and 3.5Turbo) version "0613".  This release allows the ChatCompletion API to make "function_calls." This means that when provided with a list of functions, ChatCompletion will decide what functions are required to be executed to fulfill the user's request.  
 
