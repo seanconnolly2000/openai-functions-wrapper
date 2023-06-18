@@ -30,6 +30,13 @@ def main():
     f.properties.add(property("q",PropertyType.string, "Name of city to get weather", True))
     functions_available_to_chatGPT[f.name] = f
 
+    # Pinecone vector database API (contains demo "company HR data" from Northwinds)
+    # comment out if you are not using Pinecone.
+    f = function(name="getPineconeData", description="Company data pertaining only to health care plans, company policies, and employee roles.")
+    f.properties.add(property("prompt",PropertyType.string, "The prompt to be used to query the vector database.  This must be in the form of a concise sentence.", True))
+    f.properties.add(property("top",PropertyType.integer, "Records to be returned.", True, None, default=5))
+    functions_available_to_chatGPT[f.name] = f
+
     # returns the datetime in GMT
     f = function(name="getCurrentUTCDateTime", description="Obtain the current UTC datetime.")
     functions_available_to_chatGPT[f.name] = f
@@ -50,7 +57,7 @@ def main():
     # FUN CHALLENGE: make 4 calls: getDogName, getCurrentDateTime (and switch it to Pacific - not always accurate), getWeather, and get some news stories
     # Since I am asking it to get a little creative with sightseeing tips for London, I'm setting the temperature below to 1.
     oai.temperature = 1
-    prompt = "What is my dog's name, tell me what time is it in PST, what is the weather like in London, and what sightseeing activities would you recommend for London this time of year?  Also please give me 5 articles on the US Economy from the last week."
+    prompt = "What is my dog's name, tell me what time is it in PST, what is the weather like in London, and what sightseeing activities would you recommend for London this time of year?  Also please give me 5 articles on the US Economy from the last week.  Also are hearing aids included in my Northwinds Standard Healthcare Plan?"
     res = oai.user_request(prompt)
     print(res)
 

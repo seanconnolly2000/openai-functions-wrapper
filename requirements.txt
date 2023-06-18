@@ -6,3 +6,6 @@ scipy>=1.10.1
 safetensors>=0.3.1
 xformers>=0.0.20
 python-dotenv>=1.0.0
+pinecone-client>=2.2.1
+sentence-transformers>=2.2.2
+torch>=2.0.1
