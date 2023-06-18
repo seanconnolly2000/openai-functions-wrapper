@@ -1,6 +1,6 @@
 # openai-functions-wrapper
 
-## ChatGPT can now execute your functions (including accessing your database) as needed!
+## ChatGPT can now execute your functions (including accessing your database) as needed, and even send emails out on your behalf!
 
 ### TL;DR: On June 13, 2023, OpenAI released chatGPT4 (and 3.5Turbo) version "0613".  This release allows the ChatCompletion API to make "function_calls." This means that when provided with a list of functions, ChatCompletion will decide what functions are required to be executed to fulfill the user's request.  
 
@@ -24,7 +24,7 @@ For ChatCompletion to work effectively, you need to keep a running history of th
 1) Download this project
 2) Create a python environment and install the requirements (in requirements.txt)
 3) create a .env file with the environment variables (see below)
-4) Get any API keys you might need (or adjust the user prompt to say something simple like "what is my dogs name and what time is it?")
+4) Get any API keys you might need (or adjust the user prompt to say something simple like "what is my dogs name and what time is it?" which doesn't require any external api calls.)
 
 ## .env File
 Create a .env file in the directory with the following (depending on what you'll be using):
@@ -43,6 +43,11 @@ PINECONE_INDEX_NAME={whatever you named your index}
 SENTENCE_ENCODER={I used all-MiniLM-L6-v2, which was in the 
                   pinecone demos, but you can use whatever - 
                   needed for encoding sentences for pinecone queries}
+
+SENDGRID_FROM_EMAIL=xxx@yyy.com
+SENDGRID_API_KEY={get a free api key from sendgrid.com - it looks like you do need to add a credit card to activate, however.}
+
+              
 ```
 
 ## Pinecone:
@@ -53,7 +58,7 @@ If you're going to use pinecone, you'll need to create an index on pinecone and 
 
 In the example, I show how you can have chatGPT request data from multiple sources.  Based upon the following prompt:
 
-**"What is my dog's name, tell me what time is it in PST, what is the weather like in London, and what sightseeing activities would you recommend for London this time of year?  Also please give me 5 articles on the US Economy from the last week.  Also are hearing aids included in my Northwinds Standard Healthcare Plan?"**
+**"What is my dog's name, tell me what time is it in PST, what is the weather like in London, and what sightseeing activities would you recommend for London this time of year?  Also please give me 5 articles on the US Economy from the last week.  Also are hearing aids included in my Northwinds Standard Healthcare Plan? Also email bob@xxxxxxxx.com and tell him I am running late for lunch."**
 
 ChatGPT determines it needs to perform the following external calls:
 
@@ -62,50 +67,78 @@ ChatGPT determines it needs to perform the following external calls:
 3) getWeather - to obtain the weather in London (this is a free api you can sign up for at weatherapi.com)-
 4) getNews - to obtain 4 news articles on the US Economy (this is a free api you can sign up for at newsapi.org)
 5) getPineconeData - this illustrates how chatGPT can format a query to an external vector database and return silo'd information (you can sign up for a free Pinecone database at Pinecone.io).
+6) sendEmail - this is fun - chatGPT can be a personal assistant for you, sending out emails.
 
-The result is as follows (failed to give me sightseeing tips, but did give me 5 citations from external data sources!):
+The result is as follows (failed to give me sightseeing tips, but did give me 5 citations from external data sources, and send an email!):
 
 ```
   "message": {
         "role": "assistant",
-        "content": "Your dog's name is Fido.\n\n
+        "content": "Your dog's name is Snoopy. 
         
-        The current time in PST is 8:20 AM.\n\n
+        The current time in PST is 12:52 PM.
         
-        The weather in London is partly cloudy with a temperature of 23.0\u00b0C (73.4\u00b0F).\n\n
+        The weather in London is partly cloudy with a temperature of 18.0\u00b0C (64.4\u00b0F).
         
-        Here are 5 articles on the US Economy from the last week:\n
-        1. Title: \"On-Orbit Satellite Servicing, New Crew Capsules and Artificial Gravity: NASA's Latest Tech Initiative\"\n   
+        For sightseeing activities in London, I would recommend visiting popular attractions 
+        such as the Tower of London, Buckingham Palace, the British Museum, the London Eye, 
+        and taking a boat tour on the River Thames. Additionally, you can explore the vibrant 
+        neighborhoods of Covent Garden, Camden Town, and Notting Hill. Don't forget to check 
+        out the West End for world-class theater performances.
+        
+        Here are 5 articles on the US Economy from the last week:\
+        
+        1. Title: \"On-Orbit Satellite Servicing, New Crew Capsules and Artificial Gravity: 
+        NASA's Latest Tech Initiative\"   
         Description: \"A new Blue Origin crewed spacecraft is in the works as part of a NASA collaboration 
-        designed to advance the orbital economy, with the space agency lending its expertise to seven different 
-        commercial partners.\"\n\n
-        2. Title: \"Partial de-dollarization is possible, but China won't dethrone the greenback even if 
-        it becomes the world's largest economy\"\n 
-        Description: \"History suggests that dollar dominance could carry on well into the second half 
-        of the 21st century, even if China's economy outpaces the US.\"\n\n
-        3. Title: \"Federal Reserve officials announce pause in US interest-rate hikes\"\n   
-        Description: \"Even with the pause, Fed officials suggest further increases may come depending on 
-        how close the economy gets to 2% inflation target.\"\n\n
-        4. Title: \"Forget de-dollarization - Argentina may adopt the greenback as its currency and 
-        abandon the peso\"\n   
-        Description: \"If Argentina adopts the greenback, it would become the biggest economy so far to 
-        dollarize, according to Bloomberg.\"\n\n
-        5. Title: \"The US economy is entering expansion, not recession, and investors fear they are missing 
-        out, Fundstrat's Tom Lee says\"\n  
-        Description: \"The US is entering a phase of economic expansion and not a recession, which means the 
-        stock-market rally will become more broad-based, Fundstrat's Tom Lee has said.\"\n\n
+        designed to advance the orbital economy, with the space agency lending its expertise to seven 
+        different commercial partners.\"
         
-        Regarding your question about hearing aids in your Northwinds Standard Healthcare Plan, the plan 
-        covers routine hearing aid maintenance and repair, counseling and hearing aid evaluations. It also 
-        covers up to $500 per ear for hearing aid accessories such as ear molds, batteries, and tubing. 
-        However, the plan does not cover hearing care services provided by out-of-network providers. If 
-        you choose to see an out-of-network provider, you will be responsible for the difference between 
-        their charges and the allowed amount by the plan."
+        2. Title: \"Partial de-dollarization is possible, but China won't dethrone the greenback even if 
+        it becomes the world's largest economy\"
+        Description: \"History suggests that dollar dominance could carry on well into the second half 
+        of the 21st century, even if China's economy outpaces the US.\"
+        
+        3. Title: \"Federal Reserve officials announce pause in US interest-rate hikes\"
+        Description: \"Even with the pause, Fed officials suggest further increases may come depending on 
+        how close the economy gets to the 2% inflation target. US Federal Reserve officials have announced 
+        a pause in interest-rate hikes, leaving rates at 5% to 5.25% after more than a year of...\"
+        
+        4. Title: \"Forget de-dollarization - Argentina may adopt the greenback as its currency and abandon the peso\"   
+        Description: \"If Argentina adopts the greenback, it would become the biggest economy so far to 
+        dollarize, according to Bloomberg.\"
+        
+        5. Title: \"The US economy is entering expansion, not recession, and investors fear they are missing 
+        out, Fundstrat's Tom Lee says\"
+        Description: \"The US is entering a phase of economic expansion and not a recession, which means 
+        the stock-market rally will become more broad-based, Fundstrat's Tom Lee has said.\"
+        
+        Regarding your question about hearing aids, according to the information I have, hearing aids are 
+        included in the Northwinds Standard Healthcare Plan. The plan covers routine hearing aid maintenance, 
+        repair, counseling, evaluations, and hearing aid accessories. However, services provided by 
+        out-of-network providers may not be covered fully. It's always best to check with your healthcare 
+        plan for details and specifics.
+        
+        I have sent an email to bob@xxxxxxxx.com informing him that you are running late for lunch."
       },
       "finish_reason": "stop"
     }
     
 ```
+
+Here is the email chatGPT executed (this literally arrived in an inbox!):
+
+```
+From: <xxx@yyy.com>
+Date: Sun, Jun 18, 2023 at 12:52 PM
+Subject: Running late for lunch
+To: <bob@xxxxxxxx.com>
+
+
+Hi Bob, just wanted to let you know that I am running late for lunch. See you soon!
+```
+
+
 
 One thing I found of interest was that chatGPT formed a sentence for the vector search:
 
