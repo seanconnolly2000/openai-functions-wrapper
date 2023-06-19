@@ -106,12 +106,16 @@ def sendEmail(**kwargs)->str:
     try:
         sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
         response = sg.send(message)
-        print(response.status_code)
-        print(response.body)
-        print(response.headers)
+        if response.status_code == 202:
+            return "MESSAGE WAS SUCCESSFULLY SENT."
+        else:
+            return "MESSAGE MAY NOT HAVE BEEN SENT."
+        #print(response.status_code)
+        #print(response.body)
+        #print(response.headers)
     except Exception as e:
-        print(e.message)
-
+        #print(e.message)
+        return "MESSAGE FAILED TO SEND."
 
 
 # If you don't plan to use Pinecone, comment out everything below:

@@ -15,8 +15,8 @@ def main():
 
     functions_available_to_chatGPT = functions()
 
-    # Hmmm - Matrix perhaps?  ChatGPT can ask itself to evaluate information, perhaps from inbound data.  
-    # Not sure this would ever be required, but kind of cool/creepy.
+    # Hmmm -  Not sure about this one - hopefully others might have thoughts. Let ChatGPT ask itself questions.  I'm not sure it can do that unless prompted by a user.  
+    # One thing I've noticed is that it may be beneficial to pass the main oai's "messages" into this so it has context...
     f = function(name="askChatGPT", description="Use a Large Language Model (LLM) to perform analysis, summarization, or classification of text using ChatGPT.")
     f.properties.add(property("temperature", PropertyType.integer, "The temperature associated with the request: 0 for factual, up to 2 for very creative.", True))
     f.properties.add(property("question", PropertyType.string, "What are you requesting be done with the text?", True))
@@ -53,7 +53,7 @@ def main():
 
     # Send Email
     # comment out if you are not using SendGrid.
-    f = function(name="sendEmail", description="Send an email. Must include to_email, subject, and body properties.")
+    f = function(name="sendEmail", description="Send an email. Must include to_email, subject, and body properties. Do not use placeholders like [Your Name].")
     f.properties.add(property("to_email", PropertyType.string, "The email recipient address in email format.", True))
     f.properties.add(property("subject", PropertyType.string, "The subject of the email.", True))
     f.properties.add(property("body", PropertyType.string, "The body of the email.", True))
