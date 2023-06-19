@@ -33,8 +33,8 @@ def main():
     functions_available_to_chatGPT[f.name] = f
 
     # Weather API (3-day forecast with air quality index data and weather alert data)
-    f = function(name="getThreeDayForecast", description="Weather API function for 3-day forecast")
-    f.properties.add(property("q", PropertyType.string, "Name of city to get weather", True))
+    f = function(name="getThreeDayForecast", description="Retrieves the weather forcast for the next 3 days for a specific city.")
+    f.properties.add(property("q", PropertyType.string, "Name of city to get weather forecast", True))
     functions_available_to_chatGPT[f.name] = f
 
     # Pinecone vector database API (contains demo "company HR data" from Northwinds)
@@ -71,17 +71,19 @@ def main():
     # FUN CHALLENGE: make 4 calls: getDogName, getCurrentDateTime (and switch it to Pacific - not always accurate), getWeather, and get some news stories
     # Since I am asking it to get a little creative with sightseeing tips for London, I'm setting the temperature below to 1.
     oai.temperature = 1
+    
+    # The prompt below shows how it is possible to chain together many function calls.  This is crazy cool:
+    # prompt = "What is my dog's name, tell me what time is it in PST, what is the weather like in London, and what sightseeing activities would you recommend for London this time of year?  Also please give me 5 articles on the US Economy from the last week.  Also are hearing aids included in my Northwinds Standard Healthcare Plan? Also email bob@xxxyyy.com and tell him I am running late for lunch."
 
+    #Contributor John was cool enough to add the recursive question input.
     while True:
         prompt = input("Enter your question: ")
         if prompt.lower() == 'quit':
             break
         res = oai.user_request(prompt)
-        # Parse the response
-        response_content = res['choices'][0]['message']['content']
-        # Remove the city name and the degree symbol
-        response_content = response_content.replace('\u00b0F', ' degrees Fahrenheit')
-        print(response_content)
+         # Replace the degree symbol
+        res = res.replace('\u00b0F', ' degrees Fahrenheit').replace('\u00b0C',' degrees Celcius')
+        print(res)
 
 if __name__ == "__main__":
     main()
