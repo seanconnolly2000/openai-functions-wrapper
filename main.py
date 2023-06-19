@@ -84,10 +84,13 @@ def main():
 
     #Contributor John was cool enough to add the recursive question input.
     while True:
-        prompt = input("Enter your question: ")
+        prompt = input("Enter your question ('cls' to reset chat, 'quit' to quit): ")
         if prompt.lower() == 'quit':
             break
-        res = oai.user_request(prompt)
+        if prompt.lower() == 'cls':
+            oai.clear_chat_session()
+        else:
+            res = oai.user_request(prompt)
          # Replace the degree symbol
         res = res.replace('\u00b0F', ' degrees Fahrenheit').replace('\u00b0C',' degrees Celcius')
         print(res)
