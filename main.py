@@ -2,8 +2,7 @@ import os
 import json
 
 from dotenv import load_dotenv
-from openaif import openaif
-
+from functions.openaif import openaif
 from functions.chat import functions, function, property, PropertyType
 from functions.samples import getCurrentWeather, getThreeDayForecast, getNews, getCurrentUTCDateTime
 
@@ -15,6 +14,14 @@ def main():
     # OTHER_ITEMS=xxxyyy
 
     functions_available_to_chatGPT = functions()
+
+    # Hmmm - Matrix perhaps?  ChatGPT can ask itself to evaluate information, perhaps from inbound data.  
+    # Not sure this would ever be required, but kind of cool/creepy.
+    f = function(name="askChatGPT", description="Use a Large Language Model (LLM) to perform analysis, summarization, or classification of text using ChatGPT.")
+    f.properties.add(property("temperature", PropertyType.integer, "The temperature associated with the request: 0 for factual, up to 2 for very creative.", True))
+    f.properties.add(property("question", PropertyType.string, "What are you requesting be done with the text?", True))
+    f.properties.add(property("text", PropertyType.string, "The text to be analyzed", True))
+    functions_available_to_chatGPT[f.name] = f
 
     # If you've used SQLCLient or OracleClient, this is similar.  You create your function, and add parameters.
     # Then you add your function to the "functions" dictionary object (a dictionary is used to allow subsequent function lookup)

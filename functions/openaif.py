@@ -9,7 +9,7 @@ from functions.chat import functions
 
 class openaif():
     # To initialize, you'll need to pass your API key and list of functions.  You can change your model if you are using gpt4
-    def __init__(self, api_key: str, functions: functions):
+    def __init__(self, api_key: str, functions: functions=[]):
         self.api_key = api_key
         self.openai = openai
         self.model = 'gpt-3.5-turbo-0613'  # gpt-4-0613
@@ -73,7 +73,8 @@ class openaif():
             functions=self.functions.to_json()
             )
         #uncomment if you want to see the communications:
-        print(self.functions.to_json())
+        if self.functions != []:
+            print(self.functions.to_json())
         print(self.messages)
         print(res)
         return res

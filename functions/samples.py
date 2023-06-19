@@ -3,6 +3,7 @@ from typing import List
 import requests  
 import datetime
 import random
+from .openaif import *
 
 
 def getCurrentUTCDateTime() -> str:
@@ -76,6 +77,17 @@ def getThreeDayForecast(**kwargs)->List:
     except:
         return None
 
+# This is a fun one - allow chatGPT to send text to itself and make requests
+# Not sure this would ever happen, but kind of fun to think about...
+def askChatGPT(**kwargs)->str:
+    question = kwargs['question'] if 'question' in kwargs else ''
+    text = kwargs['text'] if 'text' in kwargs else ''
+    temperature = kwargs['temperature'] if 'temperature' in kwargs else 0
+    prompt = "QUESTION:"  + question + "\nTEXT:" + text
+    openai_key = os.environ.get("OPENAI_APIKEY")
+    oai = openaif(openai_key)
+    oai.temperature = temperature
+    return oai.user_request(prompt)
 
 # if you don't plan to use Sendgrid for sending emails, comment out this section
 import os
@@ -129,3 +141,5 @@ def getPineconeData(**kwargs)->str:
     for result in matches['matches']:
         content += result['metadata']['content']
     return content
+
+
