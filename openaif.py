@@ -29,7 +29,7 @@ class openaif():
     def clear_chat_session(self):
         self.messages = []
 
-    def user_request(self, prompt:str)-> str:
+    def user_request(self, prompt:str):
         self.messages.append({"role": "user", "content": prompt})
         res = self.call_openai()
         if res['choices'][0]['message']:
@@ -48,7 +48,7 @@ class openaif():
                         function_response = str(funct(**function_args))  #responses must be string in order to append to messages
                         if len(function_response) > self.maximum_function_content_char_size: function_response = function_response[:self.maximum_function_content_char_size]
                         res = self.function_call(function_name, function_response)
-        return res['choices'][0]['message']['content']
+        return res
 
     def function_call(self, function:str, function_response:str):
         self.messages.append({"role": "function", "name": function, "content": function_response})

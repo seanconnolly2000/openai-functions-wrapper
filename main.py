@@ -106,9 +106,6 @@ def main():
     # recommend for Metro Atlanta this time of year, and also please give me 5 articles from Atlanta from the last couple days.""
     # Since I am asking it to get a little creative with sightseeing tips for Atlanta, I'm setting the temperature below to 1.
     oai.temperature = 1
-    
-    # The prompt below shows how it is possible to chain together many function calls.  This is crazy cool:
-    # prompt = "What is my dog's name, tell me what time is it in PST, what is the weather like in London, and what sightseeing activities would you recommend for London this time of year?  Also please give me 5 articles on the US Economy from the last week.  Also are hearing aids included in my Northwinds Standard Healthcare Plan? Also email bob@xxxyyy.com and tell him I am running late for lunch."
 
     #Contributor John was cool enough to add the recursive question input.
     while True:
@@ -119,8 +116,8 @@ def main():
         # Parse the response
         response_content = res['choices'][0]['message']['content']
         # Replace the degree symbol
-        res = res.replace('\u00b0F', ' degrees Fahrenheit').replace('\u00b0C',' degrees Celcius')
-        print(res)
+        response_content = response_content.replace('\u00b0F', ' degrees Fahrenheit').replace('\u00b0C',' degrees Celcius')
+        print(response_content)
 
 
 if __name__ == "__main__":
