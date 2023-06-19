@@ -91,9 +91,9 @@ def main():
             oai.clear_chat_session()
         else:
             res = oai.user_request(prompt)
-         # Replace the degree symbol
-        res = res.replace('\u00b0F', ' degrees Fahrenheit').replace('\u00b0C',' degrees Celcius')
-        print(res)
+             # Replace the degree symbol
+            res = res.replace('\u00b0F', ' degrees Fahrenheit').replace('\u00b0C',' degrees Celcius')
+            print(res)
 
 if __name__ == "__main__":
     main()
