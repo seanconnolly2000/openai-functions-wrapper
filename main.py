@@ -102,8 +102,7 @@ def main():
     # oai.set_chat_context("You are an extremely happy assistant.  Only include data from function calls in your responses. If you don't know something, say 'I don't know.'")
 
     # FUN CHALLENGE: make 5 calls: getDogName, getCurrentDateTime (and switch it to Eastern - not always accurate), getCurrentWeather, getThreeDayForecast, and get some news stories.
-    # "What is my dog's name, tell me what time is it in EST, what is the weather like in Atlanta, what sightseeing activities would you
-    # recommend for Metro Atlanta this time of year, and also please give me 5 articles from Atlanta from the last couple days.""
+    # "What is my dog's name, tell me what time is it in EST, what is the weather like in Atlanta, what sightseeing activities would you recommend for Metro Atlanta this time of year, and also please give me 5 articles from Atlanta from the last couple days."
     # Since I am asking it to get a little creative with sightseeing tips for Atlanta, I'm setting the temperature below to 1.
     oai.temperature = 1
 
