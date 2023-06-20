@@ -2,8 +2,7 @@ import os
 import json
 
 from dotenv import load_dotenv
-from openaif import openaif
-
+from functions.openaif import openaif
 from functions.chat import functions, function, property, PropertyType
 from functions.samples import (
     getCurrentWeather,
@@ -20,6 +19,14 @@ def main():
     # OTHER_ITEMS=xxxyyy
 
     functions_available_to_chatGPT = functions()
+
+    # Hmmm -  Not sure about this one - hopefully others might have thoughts. Let ChatGPT ask itself questions.  I'm not sure it can do that unless prompted by a user.  
+    # One thing I've noticed is that it may be beneficial to pass the main oai's "messages" into this so it has context...
+    f = function(name="askChatGPT", description="Use a Large Language Model (LLM) to perform analysis, summarization, or classification of text using ChatGPT.")
+    f.properties.add(property("temperature", PropertyType.integer, "The temperature associated with the request: 0 for factual, up to 2 for very creative.", True))
+    f.properties.add(property("question", PropertyType.string, "What are you requesting be done with the text?", True))
+    f.properties.add(property("text", PropertyType.string, "The text to be analyzed", True))
+    functions_available_to_chatGPT[f.name] = f
 
     # If you've used SQLCLient or OracleClient, this is similar.  You create your function, and add parameters.
     # Then you add your function to the "functions" dictionary object (a dictionary is used to allow subsequent function lookup)
@@ -108,16 +115,16 @@ def main():
 
     #Contributor John was cool enough to add the recursive question input.
     while True:
-        prompt = input("Enter your questions: ")
-        if prompt.lower() == "quit":
+        prompt = input("Enter your question ('cls' to reset chat, 'quit' to quit): ")
+        if prompt.lower() == 'quit':
             break
-        res = oai.user_request(prompt)
-        # Parse the response
-        response_content = res['choices'][0]['message']['content']
-        # Replace the degree symbol
-        response_content = response_content.replace('\u00b0F', ' degrees Fahrenheit').replace('\u00b0C',' degrees Celcius')
-        print(response_content)
-
+        if prompt.lower() == 'cls':
+            oai.clear_chat_session()
+        else:
+            res = oai.user_request(prompt)
+             # Replace the degree symbol
+            res = res.replace('\u00b0F', ' degrees Fahrenheit').replace('\u00b0C',' degrees Celcius')
+            print(res)
 
 if __name__ == "__main__":
     main()

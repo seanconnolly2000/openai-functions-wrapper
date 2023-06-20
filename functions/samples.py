@@ -3,6 +3,7 @@ from typing import List
 import requests  
 import datetime
 import random
+from .openaif import *
 
 
 def getCurrentUTCDateTime() -> str:
@@ -76,6 +77,17 @@ def getThreeDayForecast(**kwargs)->List:
     except:
         return None
 
+# This is a fun one - allow chatGPT to send text to itself and make requests
+# Not sure this would ever happen, but kind of fun to think about...
+def askChatGPT(**kwargs)->str:
+    question = kwargs['question'] if 'question' in kwargs else ''
+    text = kwargs['text'] if 'text' in kwargs else ''
+    temperature = kwargs['temperature'] if 'temperature' in kwargs else 0
+    prompt = "QUESTION:"  + question + "\nTEXT:" + text
+    openai_key = os.environ.get("OPENAI_APIKEY")
+    oai = openaif(openai_key)
+    oai.temperature = temperature
+    return oai.user_request(prompt)
 
 # if you don't plan to use Sendgrid for sending emails, comment out this section
 # import os
@@ -90,16 +102,20 @@ def getThreeDayForecast(**kwargs)->List:
     # if to_email == None or subject == None or body == None: return
      
 
-    # message = Mail(from_email=os.environ.get('SENDGRID_FROM_EMAIL'), to_emails=to_email, subject=subject, html_content=body)
-    # try:
-    #    sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
-    #    response = sg.send(message)
-    #    print(response.status_code)
-    #    print(response.body)
-    #    print(response.headers)
-    # except Exception as e:
-    #    print(e.message)
-
+    message = Mail(from_email=os.environ.get('SENDGRID_FROM_EMAIL'), to_emails=to_email, subject=subject, html_content=body)
+    try:
+        sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+        response = sg.send(message)
+        if response.status_code == 202:
+            return "MESSAGE WAS SUCCESSFULLY SENT."
+        else:
+            return "MESSAGE MAY NOT HAVE BEEN SENT."
+        #print(response.status_code)
+        #print(response.body)
+        #print(response.headers)
+    except Exception as e:
+        #print(e.message)
+        return "MESSAGE FAILED TO SEND."
 
 
 # If you don't plan to use Pinecone, comment out everything below:
@@ -129,3 +145,5 @@ def getThreeDayForecast(**kwargs)->List:
 #   for result in matches['matches']:
 #       content += result['metadata']['content']
 #   return content
+
+
