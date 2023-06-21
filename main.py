@@ -1,3 +1,4 @@
+import argparse
 import os
 import json
 
@@ -10,6 +11,10 @@ from functions.samples import (
     getNews,
     getCurrentUTCDateTime,
 )
+from audio_output import (
+    initialize_audio,
+    tts_output,
+)  # Import the necessary functions from audio_output.py
 
 
 def main():
@@ -17,15 +22,44 @@ def main():
     # You'll need to create a ".env" file with your credentials in the format:
     # OPENAI_APIKEY=sk-xxxxxxx
     # OTHER_ITEMS=xxxyyy
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--speak", action="store_true", help="Enable text-to-speech output"
+    )
+    args = parser.parse_args()
+
+    # Initialize audio if --speak is specified
+    engine = None
+    if args.speak:
+        engine = initialize_audio()
 
     functions_available_to_chatGPT = functions()
 
-    # Hmmm -  Not sure about this one - hopefully others might have thoughts. Let ChatGPT ask itself questions.  I'm not sure it can do that unless prompted by a user.  
+    # Hmmm -  Not sure about this one - hopefully others might have thoughts. Let ChatGPT ask itself questions.  I'm not sure it can do that unless prompted by a user.
     # One thing I've noticed is that it may be beneficial to pass the main oai's "messages" into this so it has context...
-    f = function(name="askChatGPT", description="Use a Large Language Model (LLM) to perform analysis, summarization, or classification of text using ChatGPT.")
-    f.properties.add(property("temperature", PropertyType.integer, "The temperature associated with the request: 0 for factual, up to 2 for very creative.", True))
-    f.properties.add(property("question", PropertyType.string, "What are you requesting be done with the text?", True))
-    f.properties.add(property("text", PropertyType.string, "The text to be analyzed", True))
+    f = function(
+        name="askChatGPT",
+        description="Use a Large Language Model (LLM) to perform analysis, summarization, or classification of text using ChatGPT.",
+    )
+    f.properties.add(
+        property(
+            "temperature",
+            PropertyType.integer,
+            "The temperature associated with the request: 0 for factual, up to 2 for very creative.",
+            True,
+        )
+    )
+    f.properties.add(
+        property(
+            "question",
+            PropertyType.string,
+            "What are you requesting be done with the text?",
+            True,
+        )
+    )
+    f.properties.add(
+        property("text", PropertyType.string, "The text to be analyzed", True)
+    )
     functions_available_to_chatGPT[f.name] = f
 
     # If you've used SQLCLient or OracleClient, this is similar.  You create your function, and add parameters.
@@ -113,18 +147,25 @@ def main():
     # Since I am asking it to get a little creative with sightseeing tips for Atlanta, I'm setting the temperature below to 1.
     oai.temperature = 1
 
-    #Contributor John was cool enough to add the recursive question input.
+    # Contributor John was cool enough to add the recursive question input.
     while True:
         prompt = input("Enter your question ('cls' to reset chat, 'quit' to quit): ")
-        if prompt.lower() == 'quit':
+        if prompt.lower() == "quit":
             break
-        if prompt.lower() == 'cls':
+        if prompt.lower() == "cls":
             oai.clear_chat_session()
         else:
             res = oai.user_request(prompt)
-             # Replace the degree symbol
-            res = res.replace('\u00b0F', ' degrees Fahrenheit').replace('\u00b0C',' degrees Celcius')
+            # Replace the degree symbol
+            res = res.replace("\u00b0F", " degrees Fahrenheit").replace(
+                "\u00b0C", " degrees Celcius"
+            )
             print(res)
+
+            # Speak the response if --speak is specified
+            if args.speak:
+                tts_output(engine, res)
+
 
 if __name__ == "__main__":
     main()
