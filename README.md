@@ -5,7 +5,7 @@
 ### TL;DR: On June 13, 2023, OpenAI released chatGPT4 (and 3.5Turbo) version "0613".  This release allows the ChatCompletion API to make "function_calls." This means that when provided with a list of functions, ChatCompletion will decide what functions are required to be executed to fulfill the user's request.  
 
 
-This functionality is still experimental and results can be unpredictable and unreliable, but it is a huge step forward in allowing OpenAI's LLMs to interact with the real world, from news, weather, and stock data, to company proprietary vector databases.  This project provides an example chaininig together 5 function calls at ChatCompletion's request without using langchain.
+This functionality is still experimental and results can be unpredictable and unreliable, but it is a huge step forward in allowing OpenAI's LLMs to interact with the real world, from news, weather, and stock data, to company proprietary vector databases.  This project provides an example chaining together 5 function calls at ChatCompletion's request without using langchain.
 
 Hopefully, this project will help demystify the pipeline for executing multiple requests with OpenAI's chatcompletion.
 
@@ -48,12 +48,20 @@ SENTENCE_ENCODER={I used all-MiniLM-L6-v2, which was in the
 SENDGRID_FROM_EMAIL=xxx@yyy.com
 SENDGRID_API_KEY={get a free api key from sendgrid.com - it looks like you do need to add a credit card to activate, however.}
 
-              
+PYTTSX3_VOICE_ID=english-us
+PYTTSX3_SPEED=135              
 ```
-
 ## Pinecone:
 If you're going to use pinecone, you'll need to create an index on pinecone and add encoded data.  You can look at my other project "azure-pinecone-openai-demo" for scripts that will upload azure's "Northwinds" employee dataset, or upload your own data.  If you use your own data, remember to update the description of what is stored in your data so ChatCompletion can comprehend when that function_call might be required.
 
+# Startup
+```
+python main.py
+```
+for Text to Speech output (using pyttsx3) add the --speak flag:
+```
+python main.py --speak
+```
 
 ## Usage / Results
 

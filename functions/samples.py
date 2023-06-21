@@ -90,16 +90,16 @@ def askChatGPT(**kwargs)->str:
     return oai.user_request(prompt)
 
 # if you don't plan to use Sendgrid for sending emails, comment out this section
-import os
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
-def sendEmail(**kwargs)->str:
-    to_email = kwargs['to_email'] if 'to_email' in kwargs else None 
-    subject = kwargs['subject'] if 'subject' in kwargs else None 
-    body = kwargs['body'] if 'body' in kwargs else None 
+# import os
+# from sendgrid import SendGridAPIClient
+# from sendgrid.helpers.mail import Mail
+# def sendEmail(**kwargs)->str:
+#   to_email = kwargs['to_email'] if 'to_email' in kwargs else None 
+#   subject = kwargs['subject'] if 'subject' in kwargs else None 
+#   body = kwargs['body'] if 'body' in kwargs else None 
 
     # leave if chat doesn't provide email, subject, or body
-    if to_email == None or subject == None or body == None: return
+    # if to_email == None or subject == None or body == None: return
      
 
     message = Mail(from_email=os.environ.get('SENDGRID_FROM_EMAIL'), to_emails=to_email, subject=subject, html_content=body)
@@ -119,31 +119,31 @@ def sendEmail(**kwargs)->str:
 
 
 # If you don't plan to use Pinecone, comment out everything below:
-import pinecone
-from sentence_transformers import SentenceTransformer
-import torch
+# import pinecone
+# from sentence_transformers import SentenceTransformer
+# import torch
 
 # Initialize Pinecone client and the Index, which will be passed to the chat approaches.
-def getPineconeData(**kwargs)->str:
-    prompt = kwargs['prompt']
-    top = kwargs['top'] if 'top' in kwargs else 5
+# def getPineconeData(**kwargs)->str:
+#   prompt = kwargs['prompt']
+#   top = kwargs['top'] if 'top' in kwargs else 5
 
-    index=os.environ.get('PINECONE_INDEX_NAME')
-    api_key=os.environ.get('PINECONE_API_KEY')
-    env=os.environ.get('PINECONE_ENV')
-    sentence_encoder = os.environ.get('SENTENCE_ENCODER') # example: all-MiniLM-L6-v2
-    pinecone.init(
-            api_key=api_key,
-            environment=env
-            )
-    pinecone_index = pinecone.Index(index)
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    encoder = SentenceTransformer( sentence_encoder, device=device)
-    query = encoder.encode(prompt).tolist()
-    matches = pinecone_index.query(query, top_k=top, include_metadata=True)
-    content = ''
-    for result in matches['matches']:
-        content += result['metadata']['content']
-    return content
+#   index=os.environ.get('PINECONE_INDEX_NAME')
+#   api_key=os.environ.get('PINECONE_API_KEY')
+#   env=os.environ.get('PINECONE_ENV')
+#   sentence_encoder = os.environ.get('SENTENCE_ENCODER') # example: all-MiniLM-L6-v2
+#   pinecone.init(
+#           api_key=api_key,
+#           environment=env
+#           )
+#   pinecone_index = pinecone.Index(index)
+#   device = 'cuda' if torch.cuda.is_available() else 'cpu'
+#   encoder = SentenceTransformer( sentence_encoder, device=device)
+#   query = encoder.encode(prompt).tolist()
+#   matches = pinecone_index.query(query, top_k=top, include_metadata=True)
+#   content = ''
+#   for result in matches['matches']:
+#       content += result['metadata']['content']
+#   return content
 
 
